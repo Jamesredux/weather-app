@@ -9,8 +9,11 @@ const Content = () => {
 
   const [data, setData] = useState([]);
   const fetchData = async () => {
+    const API_KEY = process.env.REACT_APP_MY_API;
+    console.log(API_KEY);
     const fetchData = await fetch(
-      'https://api.openweathermap.org/data/2.5/weather?q=bangkok&APPID=1298e2c44b15a4187449fd0c07c579b8'
+      'https://api.openweathermap.org/data/2.5/weather?q=bangkok&APPID=' +
+        API_KEY
     ).then((res) => res.json());
     setData(fetchData);
     console.log(data);
