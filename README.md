@@ -1,3 +1,7 @@
+# things to do -----
+
+search for city can bring more than 1 option, have click so they can chose correct city
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
