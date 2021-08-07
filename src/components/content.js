@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-const Content = () => {
+const Content = (props) => {
+  console.log(props);
   useEffect(() => {
     fetchData();
-
-    console.log(data);
   }, []);
 
   const [data, setData] = useState([]);
@@ -16,13 +15,10 @@ const Content = () => {
         API_KEY
     ).then((res) => res.json());
     setData(fetchData);
-    console.log(data);
   };
 
   return (
     <div className='header'>
-      <p>this is where the content goes</p>
-
       {data.main && (
         <div className='data'>
           <div>Temp: {data.main.temp - 273}</div>
