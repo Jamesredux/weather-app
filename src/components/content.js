@@ -10,16 +10,21 @@ class Content extends Component {
         lat: 13.75,
         lon: 100.5167,
       },
+      error: null,
     };
     this.getCoords = this.getCoords.bind(this);
     this.getWeather = this.getWeather.bind(this);
   }
 
   componentDidMount() {
+    // VERY IMPORTANT NEED TO CHECKED THAT STATE HAS UPDATED
+    // BEFORE YOU  RUN GET WEATHER FUNCTION COMPARE PREV STATE AND NEW OR PROPS?
     this.getWeather();
   }
 
   componentDidUpdate() {
+    // VERY IMPORTANT NEED TO CHECKED THAT STATE HAS UPDATED
+    // BEFORE YOU  RUN GET WEATHER FUNCTION COMPARE PREV STATE AND NEW OR PROPS?
     console.log(this.props);
     this.getWeather();
   }
@@ -32,7 +37,6 @@ class Content extends Component {
     } else {
       coordinates.push(this.props.city.lat, this.props.city.lon);
     }
-    console.log(coordinates);
     return coordinates;
   }
 
@@ -42,8 +46,25 @@ class Content extends Component {
     const API_KEY = process.env.REACT_APP_MY_API;
     const weatherData = await fetch(
       `https://api.openweathermap.org/data/2.5/onecall?lat=${coords[0]}&lon=${coords[1]}&exclude={part}&appid=${API_KEY}`
-    ).then((res) => res.json());
-    console.log(weatherData);
+    )
+      .then((res) => {
+        if (!res.ok) {
+          throw Error(`Error Fetching Data. Reason: ${res.statusText}`);
+        }
+        return res;
+      })
+      .then((res) => res.json())
+      .catch((err) => {
+        this.setState({ error: err.message });
+      });
+    if (weatherData) {
+      this.updateWeatherState(weatherData);
+    }
+  }
+
+  updateWeatherState(data) {
+    // when update state - reset error to null
+    console.log(data);
   }
 
   isEmpty = (obj) => {
@@ -52,41 +73,16 @@ class Content extends Component {
 
   render() {
     return (
-      <div className='header'>
+      <div className='content-container'>
+        {this.state.error && (
+          <div className='error-box'>
+            <p>{this.state.error}</p>
+          </div>
+        )}
         <p>content here</p>
       </div>
     );
   }
 }
-
-// const Content = (props) => {
-//   console.log(props);
-//   useEffect(() => {
-//     fetchData();
-//   }, []);
-
-//   const [data, setData] = useState([]);
-//   const fetchData = async () => {
-//     const API_KEY = process.env.REACT_APP_MY_API;
-
-//     const fetchData = await fetch(
-//       'https://api.openweathermap.org/data/2.5/weather?q=bangkok&APPID=' +
-//         API_KEY
-//     ).then((res) => res.json());
-//     setData(fetchData);
-//   };
-// {data.main && (
-//   <div className='data'>
-//     <div>Temp: {data.main.temp - 273}</div>
-//     <div>Humidity: {data.main.humidity}</div>
-//   </div>
-// )}
-
-//   return (
-//     <div className='header'>
-//       <p>Content here</p>
-//     </div>
-//   );
-// };
 
 export default Content;

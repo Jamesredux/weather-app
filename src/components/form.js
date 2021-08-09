@@ -3,10 +3,16 @@ import React from 'react';
 class Form extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { value: '', searchResult: {}, searchError: false };
+    this.state = {
+      value: '',
+      searchResult: {},
+      searchError: false,
+      error: null,
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.updateState = this.updateState.bind(this);
   }
 
   handleChange(event) {
@@ -22,16 +28,33 @@ class Form extends React.Component {
     const API_KEY = process.env.REACT_APP_MY_API;
     const cityResult = await fetch(
       `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&APPID=${API_KEY}`
-    ).then((res) => res.json());
+    )
+      .then((res) => {
+        if (!res.ok) {
+          throw Error(`Error fetching data. Reason: ${res.statusText}`);
+        }
 
-    if (cityResult.length < 1) {
+        return res;
+      })
+      .then((res) => res.json())
+      .catch((err) => {
+        this.setState({ error: err.message });
+      });
+    if (cityResult) {
+      this.updateState(cityResult);
+    }
+  }
+
+  updateState(city) {
+    if (city.length < 1) {
       this.setState({ searchError: true });
     } else {
       this.setState(
         (prevState) => ({
           value: '',
-          searchResult: cityResult[0],
+          searchResult: city[0],
           searchError: false,
+          error: null,
         }),
         () => {
           this.props.submitForm(this.state.searchResult);
@@ -58,6 +81,11 @@ class Form extends React.Component {
         {this.state.searchError && (
           <div className='error-box'>
             <p>Sorry: Unrecognised query. Please try again</p>
+          </div>
+        )}
+        {this.state.error && (
+          <div className='error-box'>
+            <p>{this.state.error}</p>
           </div>
         )}
       </div>
