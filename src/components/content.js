@@ -11,6 +11,7 @@ class Content extends Component {
         lon: 100.5167,
       },
       error: null,
+      data: {},
     };
     this.getCoords = this.getCoords.bind(this);
     this.getWeather = this.getWeather.bind(this);
@@ -22,11 +23,11 @@ class Content extends Component {
     this.getWeather();
   }
 
-  componentDidUpdate() {
-    // VERY IMPORTANT NEED TO CHECKED THAT STATE HAS UPDATED
-    // BEFORE YOU  RUN GET WEATHER FUNCTION COMPARE PREV STATE AND NEW OR PROPS?
-    console.log(this.props);
-    this.getWeather();
+  componentDidUpdate(prevProps) {
+    if (this.props.city !== prevProps.city) {
+      console.log('new city');
+      this.getWeather();
+    }
   }
 
   getCoords() {
@@ -64,6 +65,10 @@ class Content extends Component {
 
   updateWeatherState(data) {
     // when update state - reset error to null
+    this.setState({
+      error: null,
+      data: data,
+    });
     console.log(data);
   }
 
@@ -79,7 +84,8 @@ class Content extends Component {
             <p>{this.state.error}</p>
           </div>
         )}
-        <p>content here</p>
+        <p>{this.props.city.name}</p>
+        <p>{JSON.stringify(this.state.data)}</p>
       </div>
     );
   }
