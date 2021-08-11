@@ -2,6 +2,14 @@
 
 search for city can bring more than 1 option, have click so they can chose correct city
 
+results show
+sunrise
+sunset
+temp
+feels like
+humidity
+weather - main - descripton
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

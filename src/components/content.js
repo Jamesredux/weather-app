@@ -11,7 +11,8 @@ class Content extends Component {
         lon: 100.5167,
       },
       error: null,
-      data: {},
+      current: {},
+      hourly: [],
     };
     this.getCoords = this.getCoords.bind(this);
     this.getWeather = this.getWeather.bind(this);
@@ -28,6 +29,7 @@ class Content extends Component {
       console.log('new city');
       this.getWeather();
     }
+    console.log(this.state);
   }
 
   getCoords() {
@@ -67,9 +69,9 @@ class Content extends Component {
     // when update state - reset error to null
     this.setState({
       error: null,
-      data: data,
+      current: data.current,
+      hourly: [...data.hourly],
     });
-    console.log(data);
   }
 
   isEmpty = (obj) => {
