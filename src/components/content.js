@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
+import WeatherData from './WeatherData';
 
 class Content extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      example: {
-        name: 'Bangkok',
-        country: 'TH',
-        lat: 13.75,
-        lon: 100.5167,
-      },
       error: null,
       current: {},
       hourly: [],
@@ -18,15 +13,10 @@ class Content extends Component {
     this.getWeather = this.getWeather.bind(this);
   }
 
-  componentDidMount() {
-    // VERY IMPORTANT NEED TO CHECKED THAT STATE HAS UPDATED
-    // BEFORE YOU  RUN GET WEATHER FUNCTION COMPARE PREV STATE AND NEW OR PROPS?
-    this.getWeather();
-  }
+  componentDidMount() {}
 
   componentDidUpdate(prevProps) {
     if (this.props.city !== prevProps.city) {
-      console.log('new city');
       this.getWeather();
     }
     console.log(this.state);
@@ -34,9 +24,9 @@ class Content extends Component {
 
   getCoords() {
     const coordinates = [];
-
     if (this.isEmpty(this.props.city) === false) {
-      coordinates.push(this.state.example.lat, this.state.example.lon);
+      // Ṭhis should never fire but maybe update error if it does
+      console.log('getCoords error - -no city in props');
     } else {
       coordinates.push(this.props.city.lat, this.props.city.lon);
     }
@@ -48,7 +38,7 @@ class Content extends Component {
 
     const API_KEY = process.env.REACT_APP_MY_API;
     const weatherData = await fetch(
-      `https://api.openweathermap.org/data/2.5/onecall?lat=${coords[0]}&lon=${coords[1]}&exclude={part}&appid=${API_KEY}`
+      `https://api.openweathermap.org/data/2.5/onecall?lat=${coords[0]}&lon=${coords[1]}&units=metric&exclude={part}&appid=${API_KEY}`
     )
       .then((res) => {
         if (!res.ok) {
@@ -66,12 +56,63 @@ class Content extends Component {
   }
 
   updateWeatherState(data) {
-    // when update state - reset error to null
+    const offset = data.timezone_offset * 60;
+    console.log('all data');
+    console.log(data);
+    const currentData = this.parseCurrentData(data.current, offset);
+    console.log(currentData);
     this.setState({
       error: null,
-      current: data.current,
+      current: currentData,
       hourly: [...data.hourly],
     });
+  }
+
+  parseCurrentData(data, offset) {
+    const editedData = {
+      temp: data.temp,
+      feels_like: data.feels_like,
+      uvi: data.uvi,
+      main: data.weather[0].main,
+      details: data.weather[0].description,
+      humidity: data.humidity,
+    };
+
+    const dateTime = this.getDateTime(data.dt, offset);
+    const sunrise = this.getTime(data.sunrise);
+    const sunset = this.getTime(data.sunset);
+    editedData.dt = dateTime;
+    editedData.sunrise = sunrise;
+    editedData.sunset = sunset;
+    return editedData;
+  }
+
+  getDateTime(data, offset) {
+    console.log(data);
+    const localTime = data - offset;
+    const dateAndTime = new Date(localTime * 1000);
+    console.log(dateAndTime);
+
+    const dateString = dateAndTime.toDateString();
+    const hours = dateAndTime.getHours();
+    var minutes = dateAndTime.getMinutes();
+    if (minutes < 10) {
+      minutes = '0' + minutes;
+    }
+    const currentTime = hours + ':' + minutes;
+    const dateTimeString = dateString + ' ' + currentTime;
+    return dateTimeString;
+  }
+
+  getTime(data) {
+    const time = new Date(data * 1000);
+    const hours = time.getHours();
+    var minutes = time.getMinutes();
+    if (minutes < 10) {
+      minutes = '0' + minutes;
+    }
+    const timeResult = hours + ':' + minutes;
+    return timeResult;
   }
 
   isEmpty = (obj) => {
@@ -86,8 +127,11 @@ class Content extends Component {
             <p>{this.state.error}</p>
           </div>
         )}
-        <p>{this.props.city.name}</p>
-        <p>{JSON.stringify(this.state.data)}</p>
+        <div className='city-box'>
+          <span className='city-name'>{this.props.city.name}</span>
+          <span className='city-country'>{this.props.city.country}</span>
+        </div>
+        <WeatherData data={this.state.current} />
       </div>
     );
   }
