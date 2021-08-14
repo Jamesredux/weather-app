@@ -89,12 +89,16 @@ class Content extends Component {
 
   getDateTime(data, offset) {
     console.log(data);
-    const localTime = data - offset;
+    const localTime = data;
     const dateAndTime = new Date(localTime * 1000);
+    const UTCtime = dateAndTime.toUTCString();
     console.log(dateAndTime);
-
+    console.log(UTCtime);
+    const x = dateAndTime.toGMTString();
+    console.log(x);
     const dateString = dateAndTime.toDateString();
-    const hours = dateAndTime.getHours();
+    const hours = dateAndTime.getUTCHours();
+    console.log('hours: ', hours);
     var minutes = dateAndTime.getMinutes();
     if (minutes < 10) {
       minutes = '0' + minutes;
