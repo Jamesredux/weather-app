@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { fromUnixTime } from 'date-fns';
-import { format, utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
+import { format, utcToZonedTime } from 'date-fns-tz';
 import WeatherData from './WeatherData';
 
 class Content extends Component {
@@ -13,6 +13,7 @@ class Content extends Component {
     };
     this.getCoords = this.getCoords.bind(this);
     this.getWeather = this.getWeather.bind(this);
+    this.convertTemp = this.convertTemp.bind(this);
   }
 
   componentDidMount() {}
@@ -59,10 +60,7 @@ class Content extends Component {
 
   updateWeatherState(data) {
     const timezone = data.timezone;
-    console.log('all data');
-    console.log(data);
     const currentData = this.parseCurrentData(data.current, timezone);
-    console.log(currentData);
     this.setState({
       error: null,
       current: currentData,
@@ -71,6 +69,7 @@ class Content extends Component {
   }
 
   parseCurrentData(data, timezone) {
+    // this could be where convert temp - put button by search box
     const editedData = {
       temp: data.temp,
       feels_like: data.feels_like,
@@ -109,6 +108,12 @@ class Content extends Component {
     return Object.keys(obj).length > 0;
   };
 
+  convertTemp(e) {
+    console.log(e.target.checked);
+    // need state - if true state is F, if false, state is C
+    // then when update temp - do conversion if necessary.
+  }
+
   render() {
     return (
       <div className='content-container'>
@@ -117,6 +122,12 @@ class Content extends Component {
             <p>{this.state.error}</p>
           </div>
         )}
+        <div className='temp-switch'>
+          <label className='switch to F'>
+            Switch to F
+            <input type='checkbox' name='temp' onClick={this.convertTemp} />
+          </label>
+        </div>
         <div className='city-box'>
           <span className='city-name'>{this.props.city.name}</span>
           <span className='city-country'>{this.props.city.country}</span>

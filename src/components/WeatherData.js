@@ -7,6 +7,10 @@ class WeatherData extends Component {
     console.log(this.props);
   }
 
+  componentDidUpdate(prevProps, props) {
+    console.log(this.props);
+  }
+
   render() {
     if (this.props.data.dt) {
       const {
