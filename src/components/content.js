@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { fromUnixTime } from 'date-fns';
+import { format, utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
 import WeatherData from './WeatherData';
 
 class Content extends Component {
@@ -56,10 +58,10 @@ class Content extends Component {
   }
 
   updateWeatherState(data) {
-    const offset = data.timezone_offset * 60;
+    const timezone = data.timezone;
     console.log('all data');
     console.log(data);
-    const currentData = this.parseCurrentData(data.current, offset);
+    const currentData = this.parseCurrentData(data.current, timezone);
     console.log(currentData);
     this.setState({
       error: null,
@@ -68,7 +70,7 @@ class Content extends Component {
     });
   }
 
-  parseCurrentData(data, offset) {
+  parseCurrentData(data, timezone) {
     const editedData = {
       temp: data.temp,
       feels_like: data.feels_like,
@@ -78,45 +80,29 @@ class Content extends Component {
       humidity: data.humidity,
     };
 
-    const dateTime = this.getDateTime(data.dt, offset);
-    const sunrise = this.getTime(data.sunrise);
-    const sunset = this.getTime(data.sunset);
+    const dateTime = this.getDateTime(data.dt, timezone);
+    const sunrise = this.getTime(data.sunrise, timezone);
+    const sunset = this.getTime(data.sunset, timezone);
     editedData.dt = dateTime;
     editedData.sunrise = sunrise;
     editedData.sunset = sunset;
     return editedData;
   }
 
-  getDateTime(data, offset) {
-    console.log(data);
-    const localTime = data;
-    const dateAndTime = new Date(localTime * 1000);
-    const UTCtime = dateAndTime.toUTCString();
-    console.log(dateAndTime);
-    console.log(UTCtime);
-    const x = dateAndTime.toGMTString();
-    console.log(x);
-    const dateString = dateAndTime.toDateString();
-    const hours = dateAndTime.getUTCHours();
-    console.log('hours: ', hours);
-    var minutes = dateAndTime.getMinutes();
-    if (minutes < 10) {
-      minutes = '0' + minutes;
-    }
-    const currentTime = hours + ':' + minutes;
-    const dateTimeString = dateString + ' ' + currentTime;
-    return dateTimeString;
+  getDateTime(data, timezone) {
+    var convertedDate = fromUnixTime(data);
+    const zonedDate = utcToZonedTime(convertedDate, timezone);
+    const pattern = 'EEEEEE dd MMM yyyy HH:mm';
+    const output = format(zonedDate, pattern, { timesZone: timezone });
+    return output;
   }
 
-  getTime(data) {
-    const time = new Date(data * 1000);
-    const hours = time.getHours();
-    var minutes = time.getMinutes();
-    if (minutes < 10) {
-      minutes = '0' + minutes;
-    }
-    const timeResult = hours + ':' + minutes;
-    return timeResult;
+  getTime(data, timezone) {
+    const time = fromUnixTime(data);
+    const localTime = utcToZonedTime(time, timezone);
+    const pattern = 'HH:mm';
+    const output = format(localTime, pattern, { timeZone: timezone });
+    return output;
   }
 
   isEmpty = (obj) => {
