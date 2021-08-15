@@ -3,12 +3,10 @@ import React, { Component } from 'react';
 class WeatherData extends Component {
   constructor(props) {
     super(props);
-    console.log('weatherdata constructer');
-    console.log(this.props);
   }
 
   componentDidUpdate(prevProps, props) {
-    console.log(this.props);
+    console.log('weatherdata did update');
   }
 
   render() {
@@ -28,7 +26,22 @@ class WeatherData extends Component {
         <div className='weather-current'>
           <div className='current-top'>
             <div className='current-time'>{dt}</div>
-            <div className='current-temp'>{temp}</div>
+            <div className='current-temp'>
+              {temp}
+              {this.props.units === 'metric' ? (
+                <span> C</span>
+              ) : (
+                <span> F</span>
+              )}
+            </div>
+            <div className='feels-like'>
+              Feels Like: {feels_like}
+              {this.props.units === 'metric' ? (
+                <span> C</span>
+              ) : (
+                <span> F</span>
+              )}
+            </div>
             <div className='current-icon'>
               <p>ICON</p>
             </div>
@@ -40,7 +53,6 @@ class WeatherData extends Component {
                 <div className='details-extra'>{details}</div>
               </div>
 
-              <div className='feels-like'>Feels Like: {feels_like}</div>
               <div className='uvi-humid'>
                 <div className='uvi'>UVI: {uvi}</div>
                 <div className='humidity'>Humidity: {humidity}</div>

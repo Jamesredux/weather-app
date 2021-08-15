@@ -7,6 +7,7 @@ class Content extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      units: 'metric',
       error: null,
       current: {},
       hourly: [],
@@ -14,6 +15,8 @@ class Content extends Component {
     this.getCoords = this.getCoords.bind(this);
     this.getWeather = this.getWeather.bind(this);
     this.convertTemp = this.convertTemp.bind(this);
+    // this.getCelsiusFromFahrenheit = this.getCelsiusFromFahrenheit.bind(this);
+    // this.getFahrenheitFromCelsius = this.getFahrenheitFromCelsius.bind(this);
   }
 
   componentDidMount() {}
@@ -22,7 +25,6 @@ class Content extends Component {
     if (this.props.city !== prevProps.city) {
       this.getWeather();
     }
-    console.log(this.state);
   }
 
   getCoords() {
@@ -41,7 +43,7 @@ class Content extends Component {
 
     const API_KEY = process.env.REACT_APP_MY_API;
     const weatherData = await fetch(
-      `https://api.openweathermap.org/data/2.5/onecall?lat=${coords[0]}&lon=${coords[1]}&units=metric&exclude={part}&appid=${API_KEY}`
+      `https://api.openweathermap.org/data/2.5/onecall?lat=${coords[0]}&lon=${coords[1]}&units=${this.state.units}&exclude={part}&appid=${API_KEY}`
     )
       .then((res) => {
         if (!res.ok) {
@@ -71,8 +73,8 @@ class Content extends Component {
   parseCurrentData(data, timezone) {
     // this could be where convert temp - put button by search box
     const editedData = {
-      temp: data.temp,
-      feels_like: data.feels_like,
+      temp: Math.round(data.temp),
+      feels_like: Math.round(data.feels_like),
       uvi: data.uvi,
       main: data.weather[0].main,
       details: data.weather[0].description,
@@ -109,9 +111,54 @@ class Content extends Component {
   };
 
   convertTemp(e) {
-    console.log(e.target.checked);
-    // need state - if true state is F, if false, state is C
-    // then when update temp - do conversion if necessary.
+    if (e.target.checked) {
+      this.setState({ units: 'imperial' }, () => {
+        this.updateUnits();
+      });
+    } else {
+      this.setState({ units: 'metric' }, () => {
+        this.updateUnits();
+      });
+    }
+  }
+
+  updateUnits() {
+    // needs refactor
+    if (this.state.current.temp) {
+      if (this.state.units === 'metric') {
+        const oldTemp = this.state.current.temp;
+        const oldFeelsLike = this.state.current.feels_like;
+        const newTemp = this.getCelsiusFromFahrenheit(oldTemp);
+        const newFeelsLike = this.getCelsiusFromFahrenheit(oldFeelsLike);
+        this.setState((prevState) => ({
+          current: {
+            ...prevState.current,
+            temp: newTemp,
+            feels_like: newFeelsLike,
+          },
+        }));
+      } else if (this.state.units === 'imperial') {
+        const oldTemp = this.state.current.temp;
+        const oldFeelsLike = this.state.current.feels_like;
+        const newTemp = this.getFahrenheitFromCelsius(oldTemp);
+        const newFeelsLike = this.getFahrenheitFromCelsius(oldFeelsLike);
+        this.setState((prevState) => ({
+          current: {
+            ...prevState.current,
+            temp: newTemp,
+            feels_like: newFeelsLike,
+          },
+        }));
+      }
+    }
+  }
+
+  getCelsiusFromFahrenheit(f) {
+    return Math.round((f - 32) * (5 / 9));
+  }
+
+  getFahrenheitFromCelsius(c) {
+    return Math.round(c * (9 / 5) + 32);
   }
 
   render() {
@@ -132,7 +179,7 @@ class Content extends Component {
           <span className='city-name'>{this.props.city.name}</span>
           <span className='city-country'>{this.props.city.country}</span>
         </div>
-        <WeatherData data={this.state.current} />
+        <WeatherData data={this.state.current} units={this.state.units} />
       </div>
     );
   }
