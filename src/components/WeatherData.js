@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 
 class WeatherData extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidUpdate(prevProps, props) {
     console.log('weatherdata did update');
   }

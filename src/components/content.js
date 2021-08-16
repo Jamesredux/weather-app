@@ -14,9 +14,7 @@ class Content extends Component {
     };
     this.getCoords = this.getCoords.bind(this);
     this.getWeather = this.getWeather.bind(this);
-    this.convertTemp = this.convertTemp.bind(this);
-    // this.getCelsiusFromFahrenheit = this.getCelsiusFromFahrenheit.bind(this);
-    // this.getFahrenheitFromCelsius = this.getFahrenheitFromCelsius.bind(this);
+    this.changeScale = this.changeScale.bind(this);
   }
 
   componentDidMount() {}
@@ -40,7 +38,6 @@ class Content extends Component {
 
   async getWeather() {
     const coords = this.getCoords();
-
     const API_KEY = process.env.REACT_APP_MY_API;
     const weatherData = await fetch(
       `https://api.openweathermap.org/data/2.5/onecall?lat=${coords[0]}&lon=${coords[1]}&units=${this.state.units}&exclude={part}&appid=${API_KEY}`
@@ -71,7 +68,6 @@ class Content extends Component {
   }
 
   parseCurrentData(data, timezone) {
-    // this could be where convert temp - put button by search box
     const editedData = {
       temp: Math.round(data.temp),
       feels_like: Math.round(data.feels_like),
@@ -110,7 +106,7 @@ class Content extends Component {
     return Object.keys(obj).length > 0;
   };
 
-  convertTemp(e) {
+  changeScale(e) {
     if (e.target.checked) {
       this.setState({ units: 'imperial' }, () => {
         this.updateUnits();
@@ -123,34 +119,37 @@ class Content extends Component {
   }
 
   updateUnits() {
-    // needs refactor
     if (this.state.current.temp) {
       if (this.state.units === 'metric') {
-        const oldTemp = this.state.current.temp;
-        const oldFeelsLike = this.state.current.feels_like;
-        const newTemp = this.getCelsiusFromFahrenheit(oldTemp);
-        const newFeelsLike = this.getCelsiusFromFahrenheit(oldFeelsLike);
-        this.setState((prevState) => ({
-          current: {
-            ...prevState.current,
-            temp: newTemp,
-            feels_like: newFeelsLike,
-          },
-        }));
+        this.convertTemp('metric');
       } else if (this.state.units === 'imperial') {
-        const oldTemp = this.state.current.temp;
-        const oldFeelsLike = this.state.current.feels_like;
-        const newTemp = this.getFahrenheitFromCelsius(oldTemp);
-        const newFeelsLike = this.getFahrenheitFromCelsius(oldFeelsLike);
-        this.setState((prevState) => ({
-          current: {
-            ...prevState.current,
-            temp: newTemp,
-            feels_like: newFeelsLike,
-          },
-        }));
+        this.convertTemp('imperial');
       }
     }
+  }
+
+  convertTemp(scale) {
+    const oldTemp = this.state.current.temp;
+    const oldFeelsLike = this.state.current.feels_like;
+    if (scale === 'metric') {
+      const newTemp = this.getCelsiusFromFahrenheit(oldTemp);
+      const newFeelsLike = this.getCelsiusFromFahrenheit(oldFeelsLike);
+      this.updateTemps(newTemp, newFeelsLike);
+    } else if (scale === 'imperial') {
+      const newTemp = this.getFahrenheitFromCelsius(oldTemp);
+      const newFeelsLike = this.getFahrenheitFromCelsius(oldFeelsLike);
+      this.updateTemps(newTemp, newFeelsLike);
+    }
+  }
+
+  updateTemps(newTemp, newFeelsLike) {
+    this.setState((prevState) => ({
+      current: {
+        ...prevState.current,
+        temp: newTemp,
+        feels_like: newFeelsLike,
+      },
+    }));
   }
 
   getCelsiusFromFahrenheit(f) {
@@ -172,7 +171,7 @@ class Content extends Component {
         <div className='temp-switch'>
           <label className='switch to F'>
             Switch to F
-            <input type='checkbox' name='temp' onClick={this.convertTemp} />
+            <input type='checkbox' name='temp' onClick={this.changeScale} />
           </label>
         </div>
         <div className='city-box'>

@@ -8,7 +8,6 @@ class App extends Component {
   constructor() {
     super();
     this.state = { city: {} };
-
     this.updateCity = this.updateCity.bind(this);
   }
 
