@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { fromUnixTime } from 'date-fns';
 import { format, utcToZonedTime } from 'date-fns-tz';
 import WeatherData from './WeatherData';
+import HourlyData from './HourlyData';
 
 class Content extends Component {
   constructor(props) {
@@ -62,6 +63,7 @@ class Content extends Component {
     const currentData = this.parseCurrentData(data.current, timezone);
     this.setState({
       error: null,
+      timezone: timezone,
       current: currentData,
       hourly: [...data.hourly],
     });
@@ -178,7 +180,18 @@ class Content extends Component {
           <span className='city-name'>{this.props.city.name}</span>
           <span className='city-country'>{this.props.city.country}</span>
         </div>
-        <WeatherData data={this.state.current} units={this.state.units} />
+
+        {this.state.current.dt && (
+          <WeatherData data={this.state.current} units={this.state.units} />
+        )}
+
+        {this.state.hourly.length > 0 && (
+          <HourlyData
+            hourly={this.state.hourly}
+            units={this.state.units}
+            timezone={this.state.timezone}
+          />
+        )}
       </div>
     );
   }
