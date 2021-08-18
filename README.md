@@ -10,6 +10,8 @@ feels like
 humidity
 weather - main - descripton
 
+The updatehourlytemps shouldn't update state, but it does, I don't know why
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

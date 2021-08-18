@@ -1,39 +1,35 @@
 import React, { Component } from 'react';
-import { fromUnixTime } from 'date-fns';
-import { format, utcToZonedTime } from 'date-fns-tz';
 
 class HourlyData extends Component {
   constructor(props) {
     super(props);
-    console.log('hourly data');
     console.log(props);
   }
 
-  componentDidMount(prevProps, props) {
-    console.log('hourly did mount');
-    this.props.hourly.map((hour) => {
-      console.log(hour.dt);
-      this.getDateTime(hour.dt, this.props.timezone);
-    });
-  }
-
-  componentDidUpdate(prevProps, props) {
-    console.log('hourly did update');
-  }
-
-  getDateTime(data, timezone) {
-    var convertedDate = fromUnixTime(data);
-    const zonedDate = utcToZonedTime(convertedDate, timezone);
-    const pattern = 'EEEEEE dd MMM yyyy HH:mm';
-    const output = format(zonedDate, pattern, { timesZone: timezone });
-    // return output;
-    console.log(output);
-  }
-
   render() {
+    const hourList = this.props.hourly.map((hour) => (
+      <div className='hour-container' key={hour.id}>
+        <div className='hour-box'>
+          <p>{hour.time}</p>
+        </div>
+        <div className='hour-temp'>
+          <p>
+            {hour.temp}{' '}
+            {this.props.units === 'metric' ? <span> C</span> : <span> F</span>}
+          </p>
+        </div>
+        <div className='hour-weather'>
+          <p>{hour.main}</p>
+        </div>
+        <div className='rain-chance'>Chance of Rain: {hour.pop}</div>
+      </div>
+    ));
     return (
-      <div>
-        <p>Hourly data will go here</p>
+      <div className='hours-container'>
+        <div className='hours-header'>
+          <h1>Hourly Forcast</h1>
+        </div>
+        <div className='hours-sroll'>{hourList}</div>
       </div>
     );
   }

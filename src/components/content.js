@@ -18,8 +18,6 @@ class Content extends Component {
     this.changeScale = this.changeScale.bind(this);
   }
 
-  componentDidMount() {}
-
   componentDidUpdate(prevProps) {
     if (this.props.city !== prevProps.city) {
       this.getWeather();
@@ -61,11 +59,12 @@ class Content extends Component {
   updateWeatherState(data) {
     const timezone = data.timezone;
     const currentData = this.parseCurrentData(data.current, timezone);
+    const hourlyData = this.parseHourlyData(data.hourly, timezone);
     this.setState({
       error: null,
       timezone: timezone,
       current: currentData,
-      hourly: [...data.hourly],
+      hourly: [...hourlyData],
     });
   }
 
@@ -131,26 +130,29 @@ class Content extends Component {
   }
 
   convertTemp(scale) {
+    const newHourly = this.updateHourlyTemps(scale);
     const oldTemp = this.state.current.temp;
     const oldFeelsLike = this.state.current.feels_like;
     if (scale === 'metric') {
       const newTemp = this.getCelsiusFromFahrenheit(oldTemp);
       const newFeelsLike = this.getCelsiusFromFahrenheit(oldFeelsLike);
-      this.updateTemps(newTemp, newFeelsLike);
+      this.updateTemps(newTemp, newFeelsLike, newHourly);
     } else if (scale === 'imperial') {
       const newTemp = this.getFahrenheitFromCelsius(oldTemp);
       const newFeelsLike = this.getFahrenheitFromCelsius(oldFeelsLike);
-      this.updateTemps(newTemp, newFeelsLike);
+      this.updateTemps(newTemp, newFeelsLike, newHourly);
     }
   }
 
-  updateTemps(newTemp, newFeelsLike) {
+  updateTemps(newTemp, newFeelsLike, newHourly) {
+    console.log(newHourly);
     this.setState((prevState) => ({
       current: {
         ...prevState.current,
         temp: newTemp,
         feels_like: newFeelsLike,
       },
+      hourly: [...newHourly],
     }));
   }
 
@@ -161,6 +163,51 @@ class Content extends Component {
   getFahrenheitFromCelsius(c) {
     return Math.round(c * (9 / 5) + 32);
   }
+
+  // ################################################################
+  //  process hourly data
+
+  parseHourlyData(data, timezone) {
+    const hourlyData = data.map((obj) => {
+      let convertedData = this.convertHourlyData(obj, timezone);
+      return convertedData;
+    });
+    return hourlyData;
+  }
+
+  convertHourlyData(hour, timezone) {
+    const resultObject = {
+      id: hour.dt,
+      temp: hour.temp,
+      pop: hour.pop,
+      main: hour.weather[0].main,
+    };
+    const time = this.getTime(hour.dt, timezone);
+    resultObject.time = time;
+    return resultObject;
+  }
+
+  updateHourlyTemps(scale) {
+    const copyHourly = this.state.hourly.slice();
+    const updatedArray = copyHourly.map((hour) => {
+      let newTemp = this.updateSingleTemp(hour.temp, scale);
+      hour.temp = newTemp;
+      return hour;
+    });
+    return updatedArray;
+  }
+
+  updateSingleTemp(temp, scale) {
+    let newTemp = 0;
+    if (scale === 'metric') {
+      newTemp = this.getCelsiusFromFahrenheit(temp);
+    } else if (scale === 'imperial') {
+      newTemp = this.getFahrenheitFromCelsius(temp);
+    }
+    return newTemp;
+  }
+
+  //   Render
 
   render() {
     return (
@@ -186,11 +233,7 @@ class Content extends Component {
         )}
 
         {this.state.hourly.length > 0 && (
-          <HourlyData
-            hourly={this.state.hourly}
-            units={this.state.units}
-            timezone={this.state.timezone}
-          />
+          <HourlyData hourly={this.state.hourly} units={this.state.units} />
         )}
       </div>
     );
