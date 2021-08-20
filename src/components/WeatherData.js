@@ -15,6 +15,7 @@ class WeatherData extends Component {
       humidity,
       dt,
       main,
+      icon,
       details,
     } = this.props.data;
     return (
@@ -29,15 +30,22 @@ class WeatherData extends Component {
             Feels Like: {feels_like}
             {this.props.units === 'metric' ? <span> C</span> : <span> F</span>}
           </div>
-          <div className='current-icon'>
-            <p>ICON</p>
-          </div>
         </div>
-        <div className='current=extra'>
+        <div className='current-extra'>
           <div className='current-details'>
-            <div className='details-text'>
-              <div className='details-main'>{main}</div>
-              <div className='details-extra'>{details}</div>
+            <div className='details-box'>
+              <div className='details-text'>
+                <div className='details-main'>{main}</div>
+                <div className='details-extra'>{details}</div>
+              </div>
+              <div className='details-icon'>
+                <img
+                  src={`http://openweathermap.org/img/wn/${icon}@2x.png`}
+                  height='100'
+                  width='100'
+                  alt='icon'
+                />
+              </div>
             </div>
 
             <div className='uvi-humid'>

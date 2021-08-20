@@ -69,12 +69,14 @@ class Content extends Component {
   }
 
   parseCurrentData(data, timezone) {
+    console.log(data);
     const editedData = {
       temp: Math.round(data.temp),
       feels_like: Math.round(data.feels_like),
       uvi: data.uvi,
       main: data.weather[0].main,
       details: data.weather[0].description,
+      icon: data.weather[0].icon,
       humidity: data.humidity,
     };
 
