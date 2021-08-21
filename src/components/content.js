@@ -3,6 +3,12 @@ import { fromUnixTime } from 'date-fns';
 import { format, utcToZonedTime } from 'date-fns-tz';
 import WeatherData from './WeatherData';
 import HourlyData from './HourlyData';
+import snow from '../images/snow.jpg';
+import clouds from '../images/clouds.jpg';
+import clear from '../images/clear.jpg';
+import thunderstorm from '../images/thunderstorm.jpg';
+import weather from '../images/weather.jpg';
+import rain from '../images/rain.jpg';
 
 class Content extends Component {
   constructor(props) {
@@ -57,6 +63,7 @@ class Content extends Component {
   }
 
   updateWeatherState(data) {
+    this.updateBackground(data.current.weather[0].id);
     const timezone = data.timezone;
     const currentData = this.parseCurrentData(data.current, timezone);
     const hourlyData = this.parseHourlyData(data.hourly, timezone);
@@ -68,8 +75,26 @@ class Content extends Component {
     });
   }
 
+  updateBackground(weatherId) {
+    const htmlElement = document.documentElement;
+    let background;
+    if (weatherId < 300) {
+      background = thunderstorm;
+    } else if (weatherId < 600) {
+      background = rain;
+    } else if (weatherId < 700) {
+      background = snow;
+    } else if (weatherId === 800) {
+      background = clear;
+    } else if (weatherId > 800) {
+      background = clouds;
+    } else {
+      background = weather;
+    }
+    htmlElement.style.backgroundImage = `url(${background})`;
+  }
+
   parseCurrentData(data, timezone) {
-    console.log(data);
     const editedData = {
       temp: Math.round(data.temp),
       feels_like: Math.round(data.feels_like),
@@ -183,10 +208,13 @@ class Content extends Component {
   //  process hourly data
 
   parseHourlyData(data, timezone) {
+    console.log(data);
+    data.splice(24);
     const hourlyData = data.map((obj) => {
       let convertedData = this.convertHourlyData(obj, timezone);
       return convertedData;
     });
+
     return hourlyData;
   }
 

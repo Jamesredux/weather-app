@@ -10,6 +10,19 @@ feels like
 humidity
 weather - main - descripton
 
+weather codes:
+starts with 2** - thunderstorms
+starts with 3** - drizzle
+starts with 5** - rain
+
+starts with 6** - snow
+
+starts with 7** - fog/smoke/dust/ash/mist/tornado
+
+800 - clear sky
+
+801-804 - clouds
+
 The updatehourlytemps shouldn't update state, but it does, I don't know why
 
 # Getting Started with Create React App
