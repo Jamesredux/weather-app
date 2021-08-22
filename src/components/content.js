@@ -22,10 +22,19 @@ class Content extends Component {
     this.getCoords = this.getCoords.bind(this);
     this.getWeather = this.getWeather.bind(this);
     this.changeScale = this.changeScale.bind(this);
+    console.log(props);
+  }
+
+  componentDidMount(props) {
+    if (this.props.city) {
+      this.getWeather();
+    }
   }
 
   componentDidUpdate(prevProps) {
+    console.log('content did update');
     if (this.props.city !== prevProps.city) {
+      console.log('new city');
       this.getWeather();
     } else if (this.props.units !== prevProps.units) {
       this.changeScale(this.props.units);
@@ -241,11 +250,12 @@ class Content extends Component {
             <p>{this.state.error}</p>
           </div>
         )}
-
-        <div className='city-box'>
-          <span className='city-name'>{this.props.city.name}</span>
-          <span className='city-country'>{this.props.city.country}</span>
-        </div>
+        {this.props.city && (
+          <div className='city-box'>
+            <span className='city-name'>{this.props.city.name}</span>
+            <span className='city-country'>{this.props.city.country}</span>
+          </div>
+        )}
 
         {this.state.current.dt && (
           <WeatherData data={this.state.current} units={this.state.units} />

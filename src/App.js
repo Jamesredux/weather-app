@@ -7,14 +7,17 @@ import Form from './components/form';
 class App extends Component {
   constructor() {
     super();
-    this.state = { city: {}, units: 'metric' };
+    this.state = { city: null, units: 'metric', errorMessage: null };
     this.updateCity = this.updateCity.bind(this);
     this.changeScale = this.changeScale.bind(this);
+    this.handleError = this.handleError.bind(this);
   }
 
   updateCity(cityData) {
+    console.log('called');
     this.setState({
       city: cityData,
+      errorMessage: null,
     });
   }
 
@@ -34,11 +37,27 @@ class App extends Component {
     }
   }
 
+  handleError(message) {
+    this.setState({ city: null, errorMessage: message });
+    console.log(this.state);
+  }
+
   render() {
     return (
       <div className='container'>
-        <Form submitForm={this.updateCity} changeScale={this.changeScale} />
-        <Content city={this.state.city} units={this.state.units} />
+        <Form
+          submitForm={this.updateCity}
+          changeScale={this.changeScale}
+          handleError={this.handleError}
+        />
+        {this.state.errorMessage && (
+          <div className='error-box'>
+            <p>{this.state.errorMessage}</p>
+          </div>
+        )}
+        {!this.state.errorMessage && (
+          <Content city={this.state.city} units={this.state.units} />
+        )}
       </div>
     );
   }

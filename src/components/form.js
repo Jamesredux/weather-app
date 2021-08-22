@@ -10,8 +10,6 @@ class Form extends React.Component {
     this.state = {
       value: '',
       searchResult: {},
-      searchError: false,
-      error: null,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -42,7 +40,7 @@ class Form extends React.Component {
       })
       .then((res) => res.json())
       .catch((err) => {
-        this.setState({ error: err.message });
+        this.props.handleError(err.message);
       });
     if (cityResult) {
       this.updateState(cityResult);
@@ -52,6 +50,8 @@ class Form extends React.Component {
   updateState(city) {
     if (city.length < 1) {
       this.setState({ searchError: true });
+      const message = 'Sorry: Unrecognised query. Please try again';
+      this.props.handleError(message);
     } else {
       this.setState(
         (prevState) => ({
@@ -99,17 +99,6 @@ class Form extends React.Component {
             </span>
           </label>
         </div>
-
-        {this.state.searchError && (
-          <div className='error-box'>
-            <p>Sorry: Unrecognised query. Please try again</p>
-          </div>
-        )}
-        {this.state.error && (
-          <div className='error-box'>
-            <p>{this.state.error}</p>
-          </div>
-        )}
       </div>
     );
   }
