@@ -1,4 +1,8 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+
+const icon = <FontAwesomeIcon icon={faSearch} />;
 
 class Form extends React.Component {
   constructor(props) {
@@ -66,17 +70,35 @@ class Form extends React.Component {
   render() {
     return (
       <div className='form-area'>
+        <h2 className='logo'>Weather App</h2>
         <form onSubmit={this.handleSubmit}>
-          <label>
-            City:
-            <input
-              type='text'
-              value={this.state.value}
-              onChange={this.handleChange}
-            />
-          </label>
-          <input type='submit' value='Submit' />
+          <input
+            type='text'
+            value={this.state.value}
+            placeholder='Search Location'
+            onChange={this.handleChange}
+          />
+
+          <button className='search' type='submit'>
+            {icon}
+          </button>
         </form>
+
+        <div className='temp-switch'>
+          <label className='switch'>
+            <input
+              type='checkbox'
+              name='temp'
+              onClick={this.props.changeScale}
+            />
+            <span className='slider round'>
+              <div className='temp-letters'>
+                <span>C</span>
+                <span>F</span>
+              </div>
+            </span>
+          </label>
+        </div>
 
         {this.state.searchError && (
           <div className='error-box'>

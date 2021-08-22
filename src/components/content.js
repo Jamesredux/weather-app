@@ -27,6 +27,8 @@ class Content extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.city !== prevProps.city) {
       this.getWeather();
+    } else if (this.props.units !== prevProps.units) {
+      this.changeScale(this.props.units);
     }
   }
 
@@ -137,8 +139,8 @@ class Content extends Component {
   // ######################
   // convert temp scale
 
-  changeScale(e) {
-    if (e.target.checked) {
+  changeScale(units) {
+    if (units === 'imperial') {
       this.setState({ units: 'imperial' }, () => {
         this.convertTemp('imperial');
       });
@@ -208,7 +210,6 @@ class Content extends Component {
   //  process hourly data
 
   parseHourlyData(data, timezone) {
-    console.log(data);
     data.splice(24);
     const hourlyData = data.map((obj) => {
       let convertedData = this.convertHourlyData(obj, timezone);
@@ -240,12 +241,7 @@ class Content extends Component {
             <p>{this.state.error}</p>
           </div>
         )}
-        <div className='temp-switch'>
-          <label className='switch to F'>
-            Switch to F
-            <input type='checkbox' name='temp' onClick={this.changeScale} />
-          </label>
-        </div>
+
         <div className='city-box'>
           <span className='city-name'>{this.props.city.name}</span>
           <span className='city-country'>{this.props.city.country}</span>

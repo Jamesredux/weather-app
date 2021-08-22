@@ -1,14 +1,15 @@
 import './App.css';
+import './reset.css';
 import React, { Component } from 'react';
-import Header from './components/header';
 import Content from './components/content';
 import Form from './components/form';
 
 class App extends Component {
   constructor() {
     super();
-    this.state = { city: {} };
+    this.state = { city: {}, units: 'metric' };
     this.updateCity = this.updateCity.bind(this);
+    this.changeScale = this.changeScale.bind(this);
   }
 
   updateCity(cityData) {
@@ -17,12 +18,27 @@ class App extends Component {
     });
   }
 
+  changeScale(e) {
+    if (e.target.checked) {
+      this.setState(
+        { units: 'imperial' }
+        // , () => {
+        // this.convertTemp('imperial');}
+      );
+    } else {
+      this.setState(
+        { units: 'metric' }
+        // , () => {
+        //   this.convertTemp('metric');}
+      );
+    }
+  }
+
   render() {
     return (
       <div className='container'>
-        <Header />
-        <Form submitForm={this.updateCity} />
-        <Content city={this.state.city} />
+        <Form submitForm={this.updateCity} changeScale={this.changeScale} />
+        <Content city={this.state.city} units={this.state.units} />
       </div>
     );
   }
