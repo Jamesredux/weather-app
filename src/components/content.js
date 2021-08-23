@@ -102,11 +102,14 @@ class Content extends Component {
     } else {
       background = weather;
     }
+
     htmlElement.style.backgroundImage = `url(${background})`;
   }
 
   parseCurrentData(data, timezone) {
     const editedData = {
+      city: this.props.city.name,
+      country: this.props.city.country,
       temp: Math.round(data.temp),
       feels_like: Math.round(data.feels_like),
       uvi: data.uvi,
@@ -250,13 +253,8 @@ class Content extends Component {
             <p>{this.state.error}</p>
           </div>
         )}
-        {this.props.city && (
-          <div className='city-box'>
-            <span className='city-name'>{this.props.city.name}</span>
-            <span className='city-country'>{this.props.city.country}</span>
-          </div>
-        )}
 
+        {/* move city name in for the conditional below does it need a conditional itself? */}
         {this.state.current.dt && (
           <WeatherData data={this.state.current} units={this.state.units} />
         )}

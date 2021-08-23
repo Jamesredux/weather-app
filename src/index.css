@@ -2,7 +2,9 @@
 /* this should be a css reset */
 
 html {
-  background: url('./images/weather.jpg') no-repeat center center fixed;
+  height: 100vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    url('./images/weather.jpg') no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

@@ -52,7 +52,11 @@ class App extends Component {
         />
         {this.state.errorMessage && (
           <div className='error-box'>
-            <p>{this.state.errorMessage}</p>
+            <p className='alert'>{this.state.errorMessage}</p>
+            <p className='small-text'>
+              To make search more precise put the city's name, comma, 2-letter
+              country code (ISO3166). Example: London, GB or London, CA
+            </p>
           </div>
         )}
         {!this.state.errorMessage && (

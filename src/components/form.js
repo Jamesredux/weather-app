@@ -50,7 +50,7 @@ class Form extends React.Component {
   updateState(city) {
     if (city.length < 1) {
       this.setState({ searchError: true });
-      const message = 'Sorry: Unrecognised query. Please try again';
+      const message = 'Sorry: Not Found. Please try again';
       this.props.handleError(message);
     } else {
       this.setState(

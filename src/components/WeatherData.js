@@ -7,6 +7,8 @@ class WeatherData extends Component {
 
   render() {
     const {
+      city,
+      country,
       sunrise,
       sunset,
       temp,
@@ -20,6 +22,10 @@ class WeatherData extends Component {
     } = this.props.data;
     return (
       <div className='weather-current'>
+        <div className='city-name'>
+          <div className='large'>{city}</div>
+          <div className='large'>{country}</div>
+        </div>
         <div className='current-top'>
           <div className='current-time'>{dt}</div>
           <div className='current-temp'>
