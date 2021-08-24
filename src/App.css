@@ -20,6 +20,10 @@
   font-size: 0.9rem;
 }
 
+.yellow {
+  color: rgb(250, 250, 210);
+}
+
 /* form header */
 
 .form-area {
@@ -220,12 +224,61 @@ input:checked + .slider:before {
 }
 
 .weather-current {
-  padding: 20px;
+  /* make div size responsive */
+  margin-top: 20px;
+  padding: 5px;
+
+  min-width: 300px;
+  background: rgba(96, 96, 96, 0.6);
+  display: grid;
+  border-radius: 5px;
+  grid-template-columns: 1fr;
+  row-gap: 5px;
+}
+
+.weather-current > * {
+  padding-left: 10px;
+  /* border: 2px solid green; */
 }
 
 .city-name {
+  padding-top: 10px;
   display: flex;
-  
+}
+
+.city-box {
+  padding-right: 10px;
+}
+
+.main-info-box {
+  display: flex;
+  align-items: center;
+}
+
+.current-temp {
+  width: 130px;
+  font-size: 2.8rem;
+}
+
+.extra-box-1 > * {
+  padding-bottom: 2px;
+}
+
+.extra-box-2 {
+  display: flex;
+}
+
+.humidity {
+  padding-left: 5px;
+}
+
+.sunrise-sunset {
+  display: flex;
+  padding-bottom: 10px;
+}
+
+.sunset {
+  padding-left: 15px;
 }
 /* hours section */
 
