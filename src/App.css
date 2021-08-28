@@ -217,18 +217,22 @@ input:checked + .slider:before {
 /* content container */
 
 .content-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 350px;
+  width: 95%;
+  margin: auto 0;
+  display: grid;
+  grid-template-columns: minmax(300px, 400px) minmax(300px, 650px);
+  align-items: start;
+  justify-content: center;
+  gap: 15px;
 }
 
 .weather-current {
   /* make div size responsive */
+  min-height: 300px;
   margin-top: 20px;
   padding: 5px;
+  border: 2px solid blue;
 
-  min-width: 300px;
   background: rgba(96, 96, 96, 0.6);
   display: grid;
   border-radius: 5px;
@@ -282,6 +286,32 @@ input:checked + .slider:before {
 }
 /* hours section */
 
-.hour-container {
+.hours-container {
+  margin-top: 20px;
+  border: 2px solid blue;
+  background: rgba(96, 96, 96, 0.6);
+  border-radius: 5px;
+}
+
+.hours-header {
   display: flex;
+  justify-content: center;
+  padding-top: 10px;
+}
+
+.hour-row {
+  display: grid;
+  grid-template-columns: 10% 10% 20% 1fr;
+}
+.hours-roll {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.hour-row > * {
+  padding-right: 5px;
+}
+
+.hour-box {
+  font-size: 1.2rem;
 }
