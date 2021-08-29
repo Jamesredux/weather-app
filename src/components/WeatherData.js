@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 
 class WeatherData extends Component {
-  componentDidUpdate(prevProps, props) {
-    console.log('weatherdata did update');
-  }
+  componentDidUpdate(prevProps, props) {}
 
   render() {
     const {
@@ -16,7 +14,6 @@ class WeatherData extends Component {
       uvi,
       humidity,
       dt,
-      main,
       icon,
       details,
     } = this.props.data;

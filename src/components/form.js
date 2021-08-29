@@ -71,7 +71,7 @@ class Form extends React.Component {
     return (
       <div className='form-area'>
         <div className='logo'>
-          <h2>Weather App</h2>
+          <h2>Rain or Shine?</h2>
         </div>
         <div className='search-bar'>
           <form onSubmit={this.handleSubmit}>

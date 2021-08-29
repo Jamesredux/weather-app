@@ -3,6 +3,7 @@ import './reset.css';
 import React, { Component } from 'react';
 import Content from './components/content';
 import Form from './components/form';
+import Footer from './components/footer';
 
 class App extends Component {
   constructor() {
@@ -14,7 +15,6 @@ class App extends Component {
   }
 
   updateCity(cityData) {
-    console.log('called');
     this.setState({
       city: cityData,
       errorMessage: null,
@@ -25,21 +25,16 @@ class App extends Component {
     if (e.target.checked) {
       this.setState(
         { units: 'imperial' }
-        // , () => {
-        // this.convertTemp('imperial');}
       );
     } else {
       this.setState(
         { units: 'metric' }
-        // , () => {
-        //   this.convertTemp('metric');}
       );
     }
   }
 
   handleError(message) {
     this.setState({ city: null, errorMessage: message });
-    console.log(this.state);
   }
 
   render() {
@@ -62,6 +57,7 @@ class App extends Component {
         {!this.state.errorMessage && (
           <Content city={this.state.city} units={this.state.units} />
         )}
+        <Footer />
       </div>
     );
   }

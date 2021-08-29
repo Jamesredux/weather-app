@@ -22,7 +22,6 @@ class Content extends Component {
     this.getCoords = this.getCoords.bind(this);
     this.getWeather = this.getWeather.bind(this);
     this.changeScale = this.changeScale.bind(this);
-    console.log(props);
   }
 
   componentDidMount(props) {
@@ -32,9 +31,7 @@ class Content extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('content did update');
     if (this.props.city !== prevProps.city) {
-      console.log('new city');
       this.getWeather();
     } else if (this.props.units !== prevProps.units) {
       this.changeScale(this.props.units);
@@ -113,7 +110,6 @@ class Content extends Component {
       temp: Math.round(data.temp),
       feels_like: Math.round(data.feels_like),
       uvi: data.uvi,
-      main: data.weather[0].main,
       details: data.weather[0].description,
       icon: data.weather[0].icon,
       humidity: data.humidity,

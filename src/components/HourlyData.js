@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 
 class HourlyData extends Component {
-  constructor(props) {
-    super(props);
-    console.log(props);
-  }
-
   render() {
     const hourList = this.props.hourly.map((hour) => (
       <div className='hour-row' key={hour.id}>
