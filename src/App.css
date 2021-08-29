@@ -16,6 +16,10 @@
   font-size: 2rem;
 }
 
+.bigger {
+  font-size: 1.5rem;
+}
+
 .small-text {
   font-size: 0.9rem;
 }
@@ -27,7 +31,7 @@
 /* form header */
 
 .form-area {
-  height: 100px;
+  min-height: 100px;
   width: 100%;
   background-color: rgba(96, 96, 96, 1);
   display: grid;
@@ -217,18 +221,19 @@ input:checked + .slider:before {
 /* content container */
 
 .content-container {
-  width: 95%;
+  width: 80%;
+
   margin: auto 0;
   display: grid;
-  grid-template-columns: minmax(300px, 400px) minmax(300px, 650px);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   align-items: start;
   justify-content: center;
-  gap: 15px;
+  gap: 1rem;
 }
 
 .weather-current {
-  /* make div size responsive */
   min-height: 300px;
+
   margin-top: 20px;
   padding: 5px;
   border: 2px solid blue;
@@ -241,7 +246,7 @@ input:checked + .slider:before {
 }
 
 .weather-current > * {
-  padding-left: 10px;
+  padding-left: 1rem;
   /* border: 2px solid green; */
 }
 
@@ -251,7 +256,7 @@ input:checked + .slider:before {
 }
 
 .city-box {
-  padding-right: 10px;
+  padding-right: 1rem;
 }
 
 .main-info-box {
@@ -287,6 +292,7 @@ input:checked + .slider:before {
 /* hours section */
 
 .hours-container {
+  grid-column: span 2;
   margin-top: 20px;
   border: 2px solid blue;
   background: rgba(96, 96, 96, 0.6);
@@ -296,16 +302,32 @@ input:checked + .slider:before {
 .hours-header {
   display: flex;
   justify-content: center;
-  padding-top: 10px;
+  padding: 1rem;
+}
+
+.hours-roll {
+  max-height: 650px;
+  overflow: auto;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* make scrollbar transparent */
 }
 
 .hour-row {
   display: grid;
-  grid-template-columns: 10% 10% 20% 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  row-gap: 10px;
+  padding: 1rem;
 }
-.hours-roll {
-  padding-left: 10px;
-  padding-right: 10px;
+
+.hour-row:nth-child(odd) {
+  background: rgba(96, 96, 96, 0.4);
+}
+
+.hour-row:nth-child(even) {
+  background: rgba(96, 96, 96, 0.8);
 }
 
 .hour-row > * {
@@ -313,5 +335,39 @@ input:checked + .slider:before {
 }
 
 .hour-box {
-  font-size: 1.2rem;
+  font-size: 2rem;
+}
+
+@media screen and (max-width: 600px) {
+  .content-container {
+    width: 90%;
+  }
+  .hours-container {
+    grid-column: span 1;
+  }
+
+  .hours-roll {
+    max-height: none;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .form-area {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    row-gap: 5px;
+    padding: 15px;
+  }
+  .content-container {
+    width: 90%;
+  }
+
+  .hours-roll {
+    max-height: none;
+  }
+}
+
+@media screen and (min-width: 1600px) {
+  .content-container {
+    width: 70%;
+  }
 }

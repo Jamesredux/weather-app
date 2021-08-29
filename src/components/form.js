@@ -70,19 +70,23 @@ class Form extends React.Component {
   render() {
     return (
       <div className='form-area'>
-        <h2 className='logo'>Weather App</h2>
-        <form onSubmit={this.handleSubmit}>
-          <input
-            type='text'
-            value={this.state.value}
-            placeholder='Search Location'
-            onChange={this.handleChange}
-          />
+        <div className='logo'>
+          <h2>Weather App</h2>
+        </div>
+        <div className='search-bar'>
+          <form onSubmit={this.handleSubmit}>
+            <input
+              type='text'
+              value={this.state.value}
+              placeholder='Search Location'
+              onChange={this.handleChange}
+            />
 
-          <button className='search' type='submit'>
-            {icon}
-          </button>
-        </form>
+            <button className='search' type='submit'>
+              {icon}
+            </button>
+          </form>
+        </div>
 
         <div className='temp-switch'>
           <label className='switch'>

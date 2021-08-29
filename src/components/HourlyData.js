@@ -9,10 +9,10 @@ class HourlyData extends Component {
   render() {
     const hourList = this.props.hourly.map((hour) => (
       <div className='hour-row' key={hour.id}>
-        <div className='hour-box yellow'>
+        <div className='hour-box yellow bigger'>
           <p>{hour.time}</p>
         </div>
-        <div className='hour-temp'>
+        <div className='hour-temp bigger'>
           <p>
             {hour.temp}
             {this.props.units === 'metric' ? (
@@ -22,10 +22,10 @@ class HourlyData extends Component {
             )}
           </p>
         </div>
-        <div className='hour-weather'>
+        <div className='hour-weather bigger'>
           <p>{hour.main}</p>
         </div>
-        <div className='rain-chance'>Chance of Rain: {hour.pop}</div>
+        <div className='rain-chance'>Chance of Rain: {hour.pop}%</div>
       </div>
     ));
     return (

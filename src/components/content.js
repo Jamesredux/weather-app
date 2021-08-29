@@ -235,7 +235,7 @@ class Content extends Component {
     const resultObject = {
       id: hour.dt,
       temp: Math.round(hour.temp),
-      pop: hour.pop,
+      pop: Math.round(hour.pop * 100),
       main: hour.weather[0].main,
     };
     const time = this.getTime(hour.dt, timezone);
