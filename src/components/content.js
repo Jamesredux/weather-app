@@ -4,11 +4,11 @@ import { format, utcToZonedTime } from 'date-fns-tz';
 import WeatherData from './WeatherData';
 import HourlyData from './HourlyData';
 import snow from '../images/snow.jpg';
-import clouds from '../images/clouds.jpg';
+import cloudy from '../images/cloudy.jpg';
 import clear from '../images/clear.jpg';
 import thunderstorm from '../images/thunderstorm.jpg';
-import weather from '../images/weather.jpg';
 import rain from '../images/rain.jpg';
+import weather from '../images/weather.jpg';
 
 class Content extends Component {
   constructor(props) {
@@ -95,7 +95,7 @@ class Content extends Component {
     } else if (weatherId === 800) {
       background = clear;
     } else if (weatherId > 800) {
-      background = clouds;
+      background = cloudy;
     } else {
       background = weather;
     }

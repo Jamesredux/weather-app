@@ -235,7 +235,7 @@ input:checked + .slider:before {
   min-height: 300px;
   margin-top: 20px;
   padding: 5px;
-  background-color: rgba(52, 89, 149, 0.6);
+  background-color: rgba(96, 96, 96, 0.7);
   display: grid;
   border-radius: 5px;
   grid-template-columns: 1fr;
@@ -292,7 +292,7 @@ input:checked + .slider:before {
   grid-column: span 2;
   margin-top: 20px;
 
-  background-color: rgba(52, 89, 149, 0.6);
+  background-color: rgba(96, 96, 96, 0.7);
   border-radius: 5px;
 }
 
@@ -320,11 +320,11 @@ input:checked + .slider:before {
 }
 
 .hour-row:nth-child(odd) {
-  background-color: rgba(52, 89, 149, 0.6);
+  background-color: rgba(96, 96, 96, 0.7);
 }
 
 .hour-row:nth-child(even) {
-  background: rgba(48, 82, 136, 0.6);
+  background: rgba(96, 96, 96, 0.5);
 }
 
 .hour-row > * {
