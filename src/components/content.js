@@ -245,8 +245,8 @@ class Content extends Component {
     return (
       <div className='content-container'>
         {this.state.error && (
-          <div className='error-box'>
-            <p>{this.state.error}</p>
+          <div className='error-box bigger'>
+            <div>{this.state.error}</div>
           </div>
         )}
 

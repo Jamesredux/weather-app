@@ -208,7 +208,7 @@ input:checked + .slider:before {
   align-items: center;
   margin-top: 40px;
   padding: 10px;
-  min-width: 300px;
+  max-width: 90%;
   min-height: 120px;
   border: 0;
   border-radius: 5px;

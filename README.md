@@ -1,29 +1,19 @@
-# things to do -----
+# weather-app
 
-search for city can bring more than 1 option, have click so they can chose correct city
+Created as part of [The Odin Project](https://www.theodinproject.com/paths/full-stack-javascript/courses/javascript/lessons/weather-app)
 
-results show
-sunrise
-sunset
-temp
-feels like
-humidity
-weather - main - descripton
+I used the OpenWeather 'One Call Api' which gives extra data
+like sunset/sunrise and hourly forcast
 
-weather codes:
-starts with 2** - thunderstorms
-starts with 3** - drizzle
-starts with 5** - rain
+I used date-fns to convert the times to the correct timezone.
 
-starts with 6** - snow
+# To-Do
 
-starts with 7** - fog/smoke/dust/ash/mist/tornado
-
-800 - clear sky
-
-801-804 - clouds
-
-The updatehourlytemps shouldn't update state, but it does, I don't know why
+Background images are stored in the src directory. Change this to another option, possible look into CDN
+make search box a little bigger but responsive
+Check performance.
+Convert Css to tailwind or scss
+tidy styling
 
 # Getting Started with Create React App
 
